@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Layout</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Sidebar -->
+  <div class="sidemenu">
+    <h2>My Panel</h2>
+    <a href="#dashboard" onclick="showPage('dashboard')">📊 Dashboard</a>
+
+    <button class="dropdown-btn">🛠️ Services ▾</button>
+    <div class="submenu">
+      <a href="#web">Web Design</a>
+      <a href="#seo">SEO</a>
+      <a href="#marketing">Marketing</a>
+    </div>
+
+    <a href="#about">ℹ️ About</a>
+    <a href="#contact">📞 Contact</a>
+  </div>
+
+  <!-- Main Content -->
+  <div class="content">
+    <!-- Dashboard Section -->
+    <div id="dashboard" class="dashboard page">
+      <h1>Dashboard</h1>
+      <p>Overview of your analytics and performance</p>
+
+      <div class="cards">
+  <div class="card">
+    <h3 id="leads">0</h3>
+    <p>New Leads</p>
+  </div>
+  <div class="card">
+    <h3 id="conversion">0%</h3>
+    <p>Conversion Rate</p>
+  </div>
+  <div class="card">
+    <h3 id="projects">0</h3>
+    <p>Active Projects</p>
+  </div>
+  <div class="card">
+    <h3 id="revenue">₹0</h3>
+    <p>Total Revenue</p>
+  </div>
+</div>
+
+      <div class="chart">
+        <h2>Monthly Report</h2>
+        <p>(You can add chart here later using Chart.js or Google Charts)</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- JS for Submenu and Page Switching -->
+  <script>
+    // Toggle submenu
+    document.querySelectorAll(".dropdown-btn").forEach(btn => {
+      btn.addEventListener("click", function() {
+        this.classList.toggle("active");
+        const submenu = this.nextElementSibling;
+        submenu.style.display = submenu.style.display === "block" ? "none" : "block";
+      });
+    });
+
+    // Show dashboard or other pages (future expansion)
+    function showPage(pageId) {
+      document.querySelectorAll(".page").forEach(page => page.style.display = "none");
+      document.getElementById(pageId).style.display = "block";
+    }
+
+    // Default page
+    showPage('dashboard');
+  </script>
+
+</body>
+</html>
+<script>
+  // Replace this with your published CSV link
+  const sheetURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQnpqEleJXW_6VbUsL1PmR2YfZq84-g0ortFQOe3GKS0GtTdgkOQzd6ldTQdXojhuXeBNGqTxZHG9Po/pub?output=csv";
+
+  fetch(sheetURL)
+    .then(response => response.text())
+    .then(csv => {
+      // Convert CSV text into rows
+      const rows = csv.split('\n');
+      const values = rows[1].split(','); // second line (your data)
+
+      // Assign values to HTML elements
+      document.getElementById("leads").innerText = values[0];
+      document.getElementById("conversion").innerText = values[1] + "%";
+      document.getElementById("projects").innerText = values[2];
+      document.getElementById("revenue").innerText = "₹" + values[3];
+    })
+    .catch(error => console.error("Error loading sheet:", error));
+</script>
